@@ -20,27 +20,27 @@ class EnviaAudio:
         return self.client.query(query).to_dataframe()
 
     # Função que formata os dados da query extraída do BigQuery
-    def format_frota_data(self, query):
-        formatted_data = {}
+    def formata_query(self, query):
+        formata_dados = {}
         for index, row in query.iterrows():
-            formatted_data = {
+            formata_dados = {
             }
-        return formatted_data
+        return formata_dados
 
     # Função que gera o texto que será convertido em áudio
-    def generate_audio_text(self, query):
+    def converte_audio(self, query):
         texto = (
 
         )
         return texto
     
     # Função que salva o texto em áudio
-    def save_audio(self, texto):
+    def salva_audio(self, texto):
         tts = gTTS(texto, lang='pt-br')
         tts.save(self.caminho_audio)
 
     # Função que faz o upload do arquivo de áudio para o bucket
-    def upload_to_bucket(self):
+    def upload_bucket(self):
         storage_client = storage.Client()
         bucket = storage_client.bucket(self.nome_bucket)
         blob = bucket.blob(self.caminho_bucket)
@@ -48,7 +48,7 @@ class EnviaAudio:
         print(f"File {self.caminho_audio} uploaded to {self.caminho_bucket}.")
 
     # Função que captura o link do arquivo de áudio no bucket e envia a mensagem para o WhatsApp
-    def send_whatsapp_message(self):
+    def envia_whats(self):
         storage_client = storage.Client.from_service_account_json(self.service_account_json)
         bucket = storage_client.bucket(self.nome_bucket)
         mp3_blob = bucket.blob(self.caminho_bucket)
@@ -122,10 +122,10 @@ class EnviaAudio:
         formata_dados = self.format_reserva_data(executa_query)
         print('------------------- QUERY EXECUTADA -------------------')
 
-        texto = self.generate_audio_text(formata_dados)
-        self.save_audio(texto)
-        self.upload_to_bucket()
-        self.send_whatsapp_message()
+        texto = self.converte_audiot(formata_dados)
+        self.salva_audio(texto)
+        self.upload_bucket()
+        self.envia_whats()
         time.sleep(10)
         print("------------------ Processo concluido com sucesso! ------------------")
 
